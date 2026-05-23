@@ -1,1 +1,1 @@
-# Everest-Snow-Cover-AI4EO-Final-Project
+# Everest Snow Cover AI4EO
