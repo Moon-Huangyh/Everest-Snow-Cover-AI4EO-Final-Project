@@ -1,15 +1,27 @@
 # Everest Snow Cover AI4EO
-### Monitoring seasonal snow-cover variability in the western Mount Everest during 2025 using Sentinel-2 imagery, unsupervised classification, and Gaussian Process interpolation.
+### Monitoring seasonal snow-cover variability in the western Mount Everest region during 2025 using Sentinel-2 imagery, unsupervised classification, and Gaussian Process interpolation.
 
 <p align="center">
   <img src="figures/fig_03_monthly_kmeans_snow_masks_2025.png" alt="Monthly K-means snow masks in 2025" width="600">
 </p>
 
+## Table of Contents
 
+- [Project Overview](#project-overview)
+- [Background and Problem Statement](#background-and-problem-statement)
+- [Data and Study Area](#data-and-study-area)
+- [Getting Started and Repository Structure](#getting-started-and-repository-structure)
+- [Methodology](#methodology)
+- [Results](#results)
+- [Environmental Cost Assessment](#environmental-cost-assessment)
+- [Limitations and Future Work](#limitations-and-future-work)
+- [References](#references)
+- [Contact](#contact)
+- [Acknowledgement](#acknowledgement)
 
 ## Project Overview
 
-This project monitors seasonal snow-cover variability in a selected western Mount Everest Area of Interest (AOI) during 2025. It uses 12 monthly Sentinel-2 Level-2A scenes to map snow cover, compare an NDSI-threshold baseline with K-means unsupervised classification and Gaussian Mixture Model (GMM), and reconstruct a smooth seasonal snow-cover curve using Gaussian Process regression.
+This project monitors seasonal snow-cover variability in a selected western Mount Everest Area of Interest (AOI) during 2025.It uses 12 monthly Sentinel-2 Level-2A scenes to map snow cover, compare an NDSI-threshold baseline with K-means unsupervised classification, test Gaussian Mixture Model (GMM) on one representative month, and reconstruct a smooth seasonal snow-cover curve using Gaussian Process regression.
 
 The workflow produces monthly snow masks, monthly snow-cover fractions, a K-means and GMM method comparison for one representative month, and a Gaussian Process interpolation with uncertainty and artificial gap validation.
 
@@ -26,7 +38,7 @@ The aim of this project is to develop a compact AI4EO workflow for mapping and r
 - to download and organise one Sentinel-2 Level-2A scene for each month of 2025;
 - to calculate NDSI and NDVI after masking invalid, cloud-contaminated and cloud-shadow pixels;
 - to compare a simple NDSI-threshold snow-cover baseline with K-means unsupervised classification;
-- to carry out a K-means unsupervised learning analysis on the AOI and use a GMM on one representative month to check whether the result is sensitive to the clustering method;
+- to use GMM on one representative month to check whether the K-means result is sensitive to the clustering method;
 - to reconstruct a smooth seasonal snow-cover curve from monthly K-means snow-cover fractions using Gaussian Process regression, including uncertainty estimates and artificial gap validation.
 
 <p align="center">
@@ -37,7 +49,7 @@ The aim of this project is to develop a compact AI4EO workflow for mapping and r
 
 ## Data and Study Area
 
-This project uses Sentinel-2 Level-2A imagery from the Copernicus Data Space. The study area is a selected Area of Interest (AOI) in the western Mount Everest region, covered by Sentinel-2 tile `45RVM`. The AOI is approximately bounded by 86.85–86.97°E and 28.05–28.17°N, with an approximate centre at 86.91°E, 28.11°N.
+This project uses Sentinel-2 Level-2A scene from the Copernicus Data Space. The study area is a selected Area of Interest (AOI) in the western Mount Everest region, covered by Sentinel-2 tile `45RVM`. The AOI is approximately bounded by 86.85–86.97°E and 28.05–28.17°N, with an approximate centre at 86.91°E, 28.11°N.
 
 One Sentinel-2 imagery with the lowest reported cloud-cover value is downloaded for each month of 2025 from the available Sentinel-2 products, giving 12 monthly observations in total for the snow-cover analysis. All image processing was carried out on the 20 m grid because the SWIR band and the Scene Classification Layer used in this project are available at 20 m resolution, avoiding band-shape mismatches in further analysis.
 
@@ -216,7 +228,7 @@ The workflow below summarises how the Sentinel-2 preprocessing, spectral-index c
 
 ## Results
 
-**The main results are that K-means could produce snow-cover masks for all 12 months based on the downloadesd Sentinel-2 imageries, the K-means and GMM classifications were highly consistent for the representative June scene, and the Gaussian Process model could reconstruct a smooth seasonal snow-cover curve with uncertainty estimates successfully even when some data are missing.**
+The main results show that K-means produced snow-cover masks for all 12 monthly Sentinel-2 scenes, K-means and GMM were highly consistent for the representative June scene, and the Gaussian Process model reconstructed a smooth seasonal snow-cover curve with uncertainty estimates.
 
 ### 1. Monthly K-means Snow Masks
 
@@ -257,7 +269,7 @@ The GP model reconstructs a smooth seasonal snow-cover curve from the 12 monthly
   <img src="figures/gp_artificial_gap_validation_2025.png" alt="Artificial gap validation of Gaussian Process interpolation" width="500">
 </p>
 
-The GP model trained on the remaining months after April and October data are removed. A good gap-filling result is indicated when the predicted values are close to the original observations and the observed values fall within the uncertainty intervals.
+The GP model was trained on the remaining months after April and October were temporarily removed from the dataset. A good gap-filling result is indicated when the predicted values are close to the original observations and the observed values fall within the uncertainty intervals.
 
 | Held-out month | Observed K-means snow-cover fraction | GP predicted snow-cover fraction | 95% uncertainty interval | Absolute error | Within 95% interval? |
 |---|---:|---:|---:|---:|:---:|
@@ -268,13 +280,13 @@ The full validation table is available in [`metadata/gp_artificial_gap_validatio
 
 ## Environmental Cost Assessment
 
-Although this project was completed online using existing satellite data, it still has an potential environmental cost. Energy is used when running code in Google Colab, downloading Sentinel-2 data, storing files in Google Drive, and transferring outputs through the internet. This section provides an approximate estimate of the computational carbon footprint for one clean run of the complete workflow.
+Although this project was completed online using existing satellite data, it still has a potential environmental cost. Energy is used when running code in Google Colab, downloading Sentinel-2 data, storing files in Google Drive, and transferring outputs through the internet. This section provides an approximate estimate of the computational carbon footprint for one clean run of the complete workflow.
 
 The calculation follows the same general logic as carbon-tracking tools such as CodeCarbon (https://github.com/mlco2/codecarbon), which estimate hardware electricity consumption from CPU, GPU and RAM use, and multiply it by the carbon intensity of the electricity supply. In this project, the estimate focuses on Colab computation because the exact carbon cost of network transfer and Google Drive storage is not directly available. 
 
 ### Data Used for Environmental Cost Estimation
 
-The estimate is based on one clean CPU-only run of the three notebooks. Therefore, it does not include the time and energy caused for repeated debugging runs, long-term cloud storage, Google Drive replication, network routing, or the construction and launch of the Sentinel-2 satellites.
+The estimate is based on one clean CPU-only run of the three notebooks. Therefore, it does not include the time and energy used by repeated debugging runs, long-term cloud storage, Google Drive replication, network routing, or the construction and launch of the Sentinel-2 satellites.
 
 | Assumption | Value used | Reason |
 |---|---:|---|
@@ -328,20 +340,20 @@ The carbon cost of data transfer and storage was not calculated into CO₂ emiss
 
 ### Advantages of This Project Considering Energy Cost
 
-**This project owns a relatively small carbon footprint because it uses lightweight CPU-based methods rather than deep-learning model training.** K-means, GMM and Gaussian Process regression are much less time and energy consuming comparing to training a large neural network. The workflow also limits unnecessary processing by using a small AOI, selecting one Sentinel-2 scene per month, and avoiding repeated processing of full tiles where possible.
+**This project has a relatively small carbon footprint because it uses lightweight CPU-based methods rather than deep-learning model training.** K-means, GMM and Gaussian Process regression are much less time and energy consuming comparing to training a large neural network. The workflow also limits unnecessary processing by using a small AOI, selecting one Sentinel-2 scene per month, and avoiding repeated processing of full tiles where possible.
 
-The project uses existing open-access Sentinel-2 data rather than collecting new field data. Satellite-based programming can reduce the need for repeated field visits to remote high-mountain regions which may require long-distance travel, specialist equipment or higher-risk field logistics. For comparison, the US EPA states that an average passenger vehicle emits about 400 g CO₂ per mile driven (https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle). Under the baseline estimate, one clean run of this project is roughly equivalent to about 0.064 miles (about 100 metres) of driving. Better snow-cover monitoring can also support hydrological awareness, water-resource planning and climate-impact assessment in mountain regions.
+The project uses existing open-access Sentinel-2 data rather than collecting new field data. Satellite-based works can reduce the need for repeated field visits to remote high-mountain regions which may require long-distance travel, specialist equipment or higher-risk field logistics. For comparison, the US EPA states that an average passenger vehicle emits about 400 g CO₂ per mile driven (https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle). Under the baseline estimate, one clean run of this project is roughly equivalent to about 0.064 miles (about 100 metres) of driving. Better snow-cover monitoring can also support hydrological awareness, water-resource planning and climate-impact assessment in mountain regions.
 
 ### Disadvantages and Uncertainties
 
 The calculation only represents one run of the notebooks, so it is only a minimal estimate. **The real project footprint would be higher if repeated development and debugging runs were included.** The estimate also excludes considerations on network-transfer emissions, long-term Google Drive storage energy caused, and the volume of water used for data-centre cooling.
 
-The workflow is low-carbon comparing to many larger machine learning projects, but **its consumption is not zero** either. The main environmental cost is likely associated with downloading and storing the Sentinel-2 products rather than the machine-learning models themselves.
+The workflow is low-carbon compared with many larger machine learning projects, but **its consumption is not zero** either. The main environmental cost is likely associated with downloading and storing the Sentinel-2 products rather than the machine-learning models themselves.
 
 ## Limitations and Future Work
 
-- **Limited Temporal Sampling:** Only one Sentinel-2 scene was selected for each month, so the monthly snow-cover fraction represents one selected observation rather than a full monthly average. Future work could use multiple low-cloud imageries per month if available.
-- **No Independent Ground Truth:** The NDSI threshold and GMM comparison did provide useful checks, but they are not a formal accuracy assessment, and cannot provide basis for a formal confusion matrix. Future work could compare the snow masks with labelled snow products or higher-resolution reference imageries.
+- **Limited Temporal Sampling:** Only one Sentinel-2 scene was selected for each month, so the monthly snow-cover fraction represents one selected observation rather than a full monthly average. Future work could use multiple low-cloud scenes per month if available.
+- **No Independent Ground Truth:** The NDSI threshold and GMM comparison did provide useful checks, but they are not a formal accuracy assessment, and cannot provide basis for a formal confusion matrix. Future work could compare the snow masks with labelled snow products or higher-resolution reference images.
 - **Mountain Terrain and Optical Imagery Impacts:** Cloud, shadow, topographic effects and mixed pixels can still affect the classification even K-means is used. Future work could include DEM-based variables such as elevation, slope and aspect, or test SAR-based methods for cloud-affected periods.
 - Also, The workflow was tested on one western Mount Everest AOI in 2025, so wider application would require testing across more years and additional Himalayan regions.
 
@@ -362,13 +374,12 @@ https://eu-space.europa.eu/news/observer-sentinel-2a-extending-operations-meet-u
 https://github.com/mlco2/codecarbon
 https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle
 https://www.savemoneycutcarbon.com/learn-save/desnz-2025-emissions-factors
-<img width="415" height="390" alt="image" src="https://github.com/user-attachments/assets/5e97f14c-13e7-458f-a333-483a3b24f44b" />
 
 ## Contact
 
 Author: Yueheng Huang
 Email: zcfbhua@ucl.ac.uk
-Institution: Earth Science Department, University College London
+Institution: Department of Earth Sciences, University College London
 Course: GEOL0069 - AI for Earth Observation 2025-2026
 
 ## Acknowledgement
