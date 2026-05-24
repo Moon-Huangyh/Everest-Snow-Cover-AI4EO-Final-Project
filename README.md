@@ -33,7 +33,7 @@ Satellite remote sensing is suitable for this study because field observations i
 
 However, optical snow mapping is still challenging because snow, cloud, shadow, water and mixed pixels can be confused with each other or obscure the land surface. A common remote-sensing approach is to use the Normalised Difference Snow Index (NDSI), which uses the contrast between high green reflectance and low short-wave infrared reflectance of snow (Gascoin et al., 2019). This method is simple and widely used, but a fixed threshold may not capture all local surface conditions in complex mountain terrain. Monthly optical observations may also be incomplete or uneven because of cloud cover and scene availability.
 
-The aim of this project is to develop a compact AI4EO workflow for mapping and reconstructing seasonal snow-cover variability in the selected western Mount Everest AOI during 2025. The specific objectives are:
+**The aim of this project is to develop a compact AI4EO workflow for mapping and reconstructing seasonal snow-cover variability in the selected western Mount Everest AOI during 2025.** The specific objectives are:
 
 - to download and organise one Sentinel-2 Level-2A scene for each month of 2025;
 - to calculate NDSI and NDVI after masking invalid, cloud-contaminated and cloud-shadow pixels;
