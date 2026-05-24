@@ -263,4 +263,74 @@ The GP model trained on the remaining months after April and October data are re
 
 The full validation table is available in [`metadata/gp_artificial_gap_validation_2025.csv`](metadata/gp_artificial_gap_validation_2025.csv).
 
+## Environmental Cost Assessment
 
+Although this project was completed online using existing satellite data, it still has an potential environmental cost. Energy is used when running code in Google Colab, downloading Sentinel-2 data, storing files in Google Drive, and transferring outputs through the internet. This section provides an approximate estimate of the computational carbon footprint for one clean run of the complete workflow.
+
+The calculation follows the same general logic as carbon-tracking tools such as CodeCarbon (https://github.com/mlco2/codecarbon), which estimate hardware electricity consumption from CPU, GPU and RAM use, and multiply it by the carbon intensity of the electricity supply. In this project, the estimate focuses on Colab computation because the exact carbon cost of network transfer and Google Drive storage is not directly available. 
+
+### Data Used for Environmental Cost Estimation
+
+The estimate is based on one clean CPU-only run of the three notebooks. Therefore, it does not include the time and energy caused for repeated debugging runs, long-term cloud storage, Google Drive replication, network routing, or the construction and launch of the Sentinel-2 satellites.
+
+| Assumption | Value used | Reason |
+|---|---:|---|
+| Runtime: Notebook 1 | 45 min | Data search, download and extraction |
+| Runtime: Notebook 2 | 30 min | Preprocessing, K-means and GMM |
+| Runtime: Notebook 3 | 5 min | GP interpolation and validation |
+| Hardware | CPU only | No GPU training was used |
+| Average IT power draw | 100 W | Approximate CPU-only Colab workload |
+| Data-centre PUE | 1.09 | Google reported a 2025 global data centers average annual Power Usage Effectiveness (PUE) of 1.09 (https://datacenters.google/efficiency) |
+| Electricity carbon factor | 0.177 kg CO₂e/kWh | UK Government 2025 GHG conversion factors are used as a transparent reporting assumption. (https://www.savemoneycutcarbon.com/learn-save/desnz-2025-emissions-factors)|
+
+The calculation used:
+
+$$
+\mathrm{Energy\ (kWh)} = \mathrm{runtime\ (hours)} \times \mathrm{IT\ power\ (kW)} \times \mathrm{PUE}
+$$
+
+$$
+\mathrm{Emissions\ (kg\ CO_2e)} = \mathrm{Energy\ (kWh)} \times \mathrm{carbon\ intensity\ (kg\ CO_2e/kWh)}
+$$
+
+### Estimated Carbon Emissions for Computation
+
+| Workflow phase | Runtime | Energy incl. PUE | Estimated emissions |
+|---|---:|---:|---:|
+| Notebook 1: data acquisition / download / unzip | 45 min | 0.0818 kWh | 14.47 g CO₂e |
+| Notebook 2: preprocessing + K-means/GMM | 30 min | 0.0545 kWh | 9.65 g CO₂e |
+| Notebook 3: GP interpolation + validation | 5 min | 0.0091 kWh | 1.61 g CO₂e |
+| **Total clean workflow** | **80 min** | **0.1453 kWh** | **25.72 g CO₂e** |
+
+The exact Colab hardware is unknown, so the assumed IT power used here is 100 W, and the calculated results should be treated as an approximate estimate. A simple uncertainty range is also carried out by changing the assumed IT power value:
+
+| Scenario | Assumed IT power | Estimated emissions |
+|---|---:|---:|
+| Low estimate | 50 W | 12.86 g CO₂e |
+| Baseline estimate | 100 W | 25.72 g CO₂e |
+| High estimate | 200 W | 51.45 g CO₂e |
+
+### Data Transfer and Storage
+
+The largest data component of this project is the Sentinel-2 input imagery. The 12 downloaded `.zip` products have a total size of approximately 13.22 GB. The extracted `.SAFE` folders should be larger, but their exact size was not recorded. The derived outputs are much smaller, with the metadata files at about 74 KB, and the exported figures around 8.0 MB in total.
+
+| Data component | Approximate size | Treatment in this assessment |
+|---|---:|---|
+| Downloaded Sentinel-2 `.zip` products | 13.22 GB | Reported as data-transfer and storage load, but not converted to CO₂e |
+| Extracted `.SAFE` products | Not recorded | Larger than the `.zip` products; stored in Google Drive |
+| Metadata files | 74 KB | Very small compared with raw Sentinel-2 data |
+| Exported figures | ~8.0 MB | Very small compared with raw Sentinel-2 data |
+
+The carbon cost of data transfer and storage was not calculated into CO₂ emission value because it depends on unknown factors such as data centre location, storage duration, replication, network routing and storage hardware. **However, they should not be ignored when considering energy cost.**
+
+### Advantages of This Project Considering Energy Cost
+
+**This project owns a relatively small carbon footprint because it uses lightweight CPU-based methods rather than deep-learning model training.** K-means, GMM and Gaussian Process regression are much less time and energy consuming comparing to training a large neural network. The workflow also limits unnecessary processing by using a small AOI, selecting one Sentinel-2 scene per month, and avoiding repeated processing of full tiles where possible.
+
+The project uses existing open-access Sentinel-2 data rather than collecting new field data. Satellite-based programming can reduce the need for repeated field visits to remote high-mountain regions which may require long-distance travel, specialist equipment or higher-risk field logistics. For comparison, the US EPA states that an average passenger vehicle emits about 400 g CO₂ per mile driven (https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle). Under the baseline estimate, one clean run of this project is roughly equivalent to about 0.064 miles (about 100 metres) of driving. Better snow-cover monitoring can also support hydrological awareness, water-resource planning and climate-impact assessment in mountain regions.
+
+### Disadvantages and Uncertainties
+
+The calculation only represents one run of the notebooks, so the real project footprint would be higher if repeated development and debugging runs were included. The estimate also excludes considerations on network-transfer emissions, long-term Google Drive storage energy caused, and the volume of water used for data-centre cooling.
+
+The workflow is low-carbon comparing to many larger machine learning projects, but its consumption is not zero either. The main environmental cost is likely associated with downloading and storing the Sentinel-2 products rather than the machine-learning models themselves.
