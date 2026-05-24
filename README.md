@@ -21,7 +21,7 @@
 
 ## Project Overview
 
-This project monitors seasonal snow-cover variability in a selected western Mount Everest Area of Interest (AOI) during 2025.It uses 12 monthly Sentinel-2 Level-2A scenes to map snow cover, compare an NDSI-threshold baseline with K-means unsupervised classification, test Gaussian Mixture Model (GMM) on one representative month, and reconstruct a smooth seasonal snow-cover curve using Gaussian Process regression.
+This project monitors seasonal snow-cover variability in a selected western Mount Everest Area of Interest (AOI) during 2025. It uses 12 monthly Sentinel-2 Level-2A scenes to map snow cover, compare an NDSI-threshold baseline with K-means unsupervised classification, test Gaussian Mixture Model (GMM) on one representative month, and reconstruct a smooth seasonal snow-cover curve using Gaussian Process regression.
 
 The workflow produces monthly snow masks, monthly snow-cover fractions, a K-means and GMM method comparison for one representative month, and a Gaussian Process interpolation with uncertainty and artificial gap validation.
 
@@ -49,9 +49,9 @@ However, optical snow mapping is still challenging because snow, cloud, shadow, 
 
 ## Data and Study Area
 
-This project uses Sentinel-2 Level-2A scene from the Copernicus Data Space. The study area is a selected Area of Interest (AOI) in the western Mount Everest region, covered by Sentinel-2 tile `45RVM`. The AOI is approximately bounded by 86.85–86.97°E and 28.05–28.17°N, with an approximate centre at 86.91°E, 28.11°N.
+This project uses Sentinel-2 Level-2A scenes from the Copernicus Data Space. The study area is a selected Area of Interest (AOI) in the western Mount Everest region, covered by Sentinel-2 tile `45RVM`. The AOI is approximately bounded by 86.85–86.97°E and 28.05–28.17°N, with an approximate centre at 86.91°E, 28.11°N.
 
-One Sentinel-2 imagery with the lowest reported cloud-cover value is downloaded for each month of 2025 from the available Sentinel-2 products, giving 12 monthly observations in total for the snow-cover analysis. All image processing was carried out on the 20 m grid because the SWIR band and the Scene Classification Layer used in this project are available at 20 m resolution, avoiding band-shape mismatches in further analysis.
+One Sentinel-2 scene with the lowest reported cloud-cover value is downloaded for each month of 2025 from the available Sentinel-2 products, giving 12 monthly observations in total for the snow-cover analysis. All image processing was carried out on the 20 m grid because the SWIR band and the Scene Classification Layer used in this project are available at 20 m resolution, avoiding band-shape mismatches in further analysis.
 
 <p align="left">
   <img src="figures/fig_01_aoi_true_colour_june_2025.png" alt="True-colour Sentinel-2 example of the study area" width="300">
@@ -389,8 +389,6 @@ https://www.savemoneycutcarbon.com/learn-save/desnz-2025-emissions-factors
 ## Contact
 
 Author: Yueheng Huang
-
-Student number: 22012844
 
 Email: zcfbhua@ucl.ac.uk
 
