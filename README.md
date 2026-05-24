@@ -126,7 +126,17 @@ The K-means model was applied with `k = 2`, so that the valid pixels were separa
   <img src="figures/kmeans_concept_diagram.png" alt="Conceptual illustration of K-means clustering with k = 2" width="600">
 </p>
 
+### 4. Gaussian Mixture Model (GMM) comparison
 
+While K-means assigns pixels to the nearest cluster centre, GMM represents each cluster as a probability distribution. This makes GMM suitable for checking whether the snow/non-snow separation is strongly affected by the choice of clustering method.
+
+GMM was applied only to the representative June 2025 scene, using the same feature stack as the K-means classification. As with K-means, the cluster with the higher mean NDSI was interpreted as the snow cluster. The resulting GMM snow mask was then compared with the K-means snow mask using snow-cover fraction and pixel-level agreement.
+
+<p align="left">
+  <img src="figures/fig_05_kmeans_vs_gmm_june_2025.png" alt="K-means and GMM comparison for June 2025" width="700">
+</p>
+
+This comparison is used as a method check rather than a full validation dataset, because no independent ground-truth snow labels were available.
 
 
 
