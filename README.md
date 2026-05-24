@@ -56,40 +56,40 @@ Information table of the downloaded materials:
 | Number of scenes | 12 monthly scenes |
 | Main derived output | Monthly snow-cover fraction |
 
-The raw Sentinel-2 `.SAFE` products are not included in this repository because of their large file size. Instead, the selected product metadata and processing notebooks are provided so that the dataset can be downloaded again if needed.
-
 ## Getting Started and Repository Structure
 
-### Running Environment
+### Running Order
 
-The notebooks were developed and run in Google Colab, and Google Drive is used to store downloaded Sentinel-2 products, processed files, metadata tables and exported figures.
+The project is organised as three Jupyter notebooks, developed and run in Google Colab. The notebooks should be run in order because each stage uses outputs from the previous stage. 
+| Notebook | Purpose |
+|---|---|
+| `01_sentinel2_data_acquisition.ipynb` | Searches, selects, downloads and extracts the monthly Sentinel-2 products. |
+| `02_snow_cover_mapping_kmeans_gmm.ipynb` | Applies SCL masking, calculates NDSI and NDVI, creates NDSI-threshold and K-means snow masks, and compares K-means with GMM for one representative month. |
+| `03_gp_interpolation_gap_validation.ipynb` | Uses the monthly K-means snow-cover fraction for Gaussian Process interpolation and artificial gap validation. |
 
-To mount Google Drive in Colab:
+Notebook 1  requires a Copernicus Data Space account to download the Sentinel-2 products. **The personal username and password should be entered securely when running the code and should not be stored directly in the notebook.**
 
-```python
-from google.colab import drive
-drive.mount('/content/drive')
-```
+### Getting Started
 
-Some packages are imported directly from the Colab environment, while additional packages are installed inside the notebooks where needed. For example, Notebook 3 installs GPy before running the GP model:
+Google Drive is used to store downloaded Sentinel-2 products, processed files, metadata tables and exported figures.
+- To mount Google Drive in Colab:
 
-```python
-!pip install GPy
-```
+  ```python
+  from google.colab import drive
+  drive.mount('/content/drive')
+  ```
 
-If Colab asks for a runtime restart after installing `GPy`, restart the runtime and then rerun the notebook cells from the beginning.
+- Some packages are imported directly from the Colab environment, while additional packages are installed inside the notebooks where needed. **For example, Notebook 3 installs GPy before running the GP model:**
 
-### Running order
+  ```python
+  !pip install GPy
+  ```
 
-To reproduce the workflow, run the notebooks in order:
-
-1. `01_sentinel2_data_acquisition.ipynb`
-2. `02_snow_cover_mapping_kmeans_gmm.ipynb`
-3. `03_gp_interpolation_gap_validation.ipynb`
-
-The raw Sentinel-2 `.SAFE` products are not uploaded to this repository because of their large file size, but the notebooks and metadata in this responsitory can demonstrate which products were selected and how the analysis was carried out. Notebook 1  requires a Copernicus Data Space account to download the Sentinel-2 products. **The personal username and password should be entered securely when running the code and should not be stored directly in the notebook.**
+  If Colab asks for a runtime restart after installing `GPy`, restart the runtime and then rerun the notebook cells from the beginning.
 
 ### Repository structure
+
+The raw Sentinel-2 `.SAFE`, `.zip` and `.jp2` files are not included in this repository because of their large file size. The selected product metadata and derived outputs are provided instead.
 
 ```text
 everest-snow-cover-ai4eo/
@@ -119,6 +119,8 @@ everest-snow-cover-ai4eo/
     ├── snow_fraction_timeseries_2025.csv
     ├── gp_interpolated_snow_fraction_2025.csv
     └── gp_artificial_gap_validation_2025.csv
+```
+
 ## Methodology
 
 ### 1. Remote Sensing Preprocessing
@@ -172,7 +174,7 @@ For each monthly scene, the valid pixels were reshaped into a pixel-by-feature m
 The K-means model was applied with `k = 2`, so that the valid pixels were separated into two clusters by minimising the within-cluster variance. After clustering, the mean NDSI value of each cluster was calculated. The cluster with the higher mean NDSI was interpreted as the snow cluster, and the other cluster was treated as non-snow.
 
 <p align="center">
-  <img src="figures/kmeans_concept_diagram.png" alt="Conceptual illustration of K-means clustering with k = 2" width="600">
+  <img src="illustrations/kmeans_concept_diagram.png" alt="Conceptual illustration of K-means clustering with k = 2" width="600">
 </p>
 
 ### 4. Gaussian Mixture Model (GMM) Comparison
@@ -206,7 +208,7 @@ An artificial gap validation was also carried out. April and October were remove
 The workflow below summarises how the Sentinel-2 preprocessing, spectral-index calculation, unsupervised classification and Gaussian Process interpolation steps are connected. Small example outputs are included to show how the intermediate and final products are generated through the pipeline.
 
 <p align="center">
-  <img src="figures/Overall_Workflow.png" alt="Remote-sensing and machine-learning implementation workflow" width="500">
+  <img src="illustrations/overall_workflow.png" alt="Remote-sensing and machine-learning implementation workflow" width="500">
 </p>
 
 ## Results
