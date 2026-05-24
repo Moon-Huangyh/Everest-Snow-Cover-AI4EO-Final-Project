@@ -128,6 +128,7 @@ everest-snow-cover-ai4eo/
 ├── illustrations/
 │   ├── overall_workflow.png
 │   └── kmeans_concept_diagram.png
+│   └──Sentinel2.png
 │
 └── metadata/
     ├── selected_monthly_products_2025.csv
