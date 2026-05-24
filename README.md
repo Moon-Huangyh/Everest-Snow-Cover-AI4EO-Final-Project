@@ -95,7 +95,7 @@ where `B8A` is the narrow near-infrared band (NIR) and `B04` is the red band (Te
   <img src="figures/fig_02_ndsi_ndvi_june_2025.png" alt="NDSI and NDVI example for June 2025" width="650">
 </p>
 
-### 2. NDSI-threshold baseline
+### 2. NDSI-threshold Baseline
 
 A simple NDSI threshold method was used as a baseline snow-cover estimate. After SCL masking, valid pixels with `NDSI > 0.4` were classified as snow, following a commonly used threshold for binary snow mapping (Dozier, 1989; Kulkarni et al., 2010).
 
@@ -107,7 +107,7 @@ $$
 
 This threshold-based test was used as a reference for comparing with the K-means classification, rather than as independent ground truth.
 
-### 3. K-means unsupervised snow classification
+### 3. K-means Unsupervised Snow Classification
 
 K-means is an unsupervised clustering algorithm that groups pixels with similar feature values without using labelled training data. In this project, **it was used as the main snow-classification method to separate valid pixels into two broad surface groups.**
 
@@ -126,17 +126,39 @@ The K-means model was applied with `k = 2`, so that the valid pixels were separa
   <img src="figures/kmeans_concept_diagram.png" alt="Conceptual illustration of K-means clustering with k = 2" width="600">
 </p>
 
-### 4. Gaussian Mixture Model (GMM) comparison
+### 4. Gaussian Mixture Model (GMM) Comparison
 
 While K-means assigns pixels to the nearest cluster centre, GMM represents each cluster as a probability distribution. This makes GMM suitable for checking whether the snow/non-snow separation is strongly affected by the choice of clustering method.
 
-GMM was applied only to the representative June 2025 scene, using the same feature stack as the K-means classification. As with K-means, the cluster with the higher mean NDSI was interpreted as the snow cluster. The resulting GMM snow mask was then compared with the K-means snow mask using snow-cover fraction and pixel-level agreement.
+GMM was applied only to the representative example of June 2025, using the same feature stack as the K-means classification, and the higher mean NDSI was also interpreted as the snow cluster. The resulting GMM snow mask was then compared with the K-means snow mask using snow-cover fraction and pixel-level agreement.
 
 <p align="left">
-  <img src="figures/fig_05_kmeans_vs_gmm_june_2025.png" alt="K-means and GMM comparison for June 2025" width="700">
+  <img src="figures/fig_04_kmeans_vs_gmm_june_2025.png" alt="K-means and GMM comparison for June 2025" width="700">
 </p>
 
 This comparison is used as a method check rather than a full validation dataset, because no independent ground-truth snow labels were available.
+
+### 5. Gaussian Process Interpolation and Gap Validation
+
+The Gaussian Process regression used the monthly K-means snow-cover fraction as the input time series. In this project, the input variable is month number, and the output variable is snow-cover fraction.
+
+Gaussian Process regression treats the seasonal snow-cover curve as a distribution of possible smooth functions, rather than fitting one fixed equation. An RBF kernel was used to describe the similarity between months:
+
+$$
+k(x, x') = \exp\left(-\frac{1}{2l^2} \| x - x' \|^2\right)
+$$
+
+This kernel includes a variance parameter and assumes that nearby months are more likely to have similar snow-cover fractions than months that are farther apart. The GP model was then used to reconstruct a seasonal snow-cover curve from the 12 monthly observations and to estimate the uncertainty between observed months.
+
+An artificial gap validation was also carried out. April and October were removed from the time series, and a new GP model was trained using the remaining months. The model predictions for the two removed months were then compared with their original K-means snow-cover fractions. This tests whether the GP model can reasonably estimate missing monthly observations.
+
+### 6. Machine Learning Implementation Workflow
+
+The workflow below summarises how the Sentinel-2 preprocessing, spectral-index calculation, unsupervised classification and Gaussian Process interpolation steps are connected. Small example outputs are included to show how the intermediate and final products are generated through the pipeline.
+
+<p align="center">
+  <img src="figures/Overall_Workflow.png" alt="Remote-sensing and machine-learning implementation workflow" width="500">
+</p>
 
 
 
