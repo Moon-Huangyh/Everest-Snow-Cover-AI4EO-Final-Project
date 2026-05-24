@@ -389,8 +389,11 @@ https://www.savemoneycutcarbon.com/learn-save/desnz-2025-emissions-factors
 ## Contact
 
 Author: Yueheng Huang
+
 Email: zcfbhua@ucl.ac.uk
+
 Institution: Department of Earth Sciences, University College London
+
 Course: GEOL0069 - AI for Earth Observation 2025-2026
 
 ## Acknowledgement
