@@ -362,18 +362,28 @@ The workflow is low-carbon compared with many larger machine learning projects, 
 
 ### Essays
 Dozier, J. (1989). Spectral signature of alpine snow cover from the Landsat Thematic Mapper. Remote sensing of environment, 28, 9-22.
+
 Gascoin, S., Grizonnet, M., Bouchet, M., Salgues, G., & Hagolle, O. (2019). Theia Snow collection: High-resolution operational snow cover maps from Sentinel-2 and Landsat-8 data. Earth System Science Data, 11(2), 493-514.
+
 Gaur, M. (2021). The Estimation of snow cover distribution using satellite data in the cold arid leh region of Indian himalaya. Polish Journal of Environmental Studies.
+
 Kulkarni, A. V., Rathore, B. P., & Singh, S. K. (2010). Distribution of seasonal snow cover in central and western Himalaya. Annals of Glaciology, 51(54), 123-128.
+
 Nagajothi, V., Priya, M. G., & Sharma, P. (2019). Snow cover estimation of western himalayas using sentinel-2 high spatial resolution data. Indian Journal of Ecology, 46(1), 88-93.
+
 Tempa, K., Ilunga, M., Agarwal, A., & Tashi. (2024). Utilizing Sentinel-2 satellite imagery for LULC and NDVI change dynamics for Gelephu, Bhutan. Applied Sciences, 14(4), 1578.
+
 Wang, Y., Su, J., Zhai, X., Meng, F., & Liu, C. (2022). Snow coverage mapping by learning from sentinel-2 satellite multispectral images via machine learning algorithms. Remote Sensing, 14(3), 782.
 
 ### Website Sources
 https://datacenters.google/efficiency
+
 https://eu-space.europa.eu/news/observer-sentinel-2a-extending-operations-meet-user-needs
+
 https://github.com/mlco2/codecarbon
+
 https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle
+
 https://www.savemoneycutcarbon.com/learn-save/desnz-2025-emissions-factors
 
 ## Contact
