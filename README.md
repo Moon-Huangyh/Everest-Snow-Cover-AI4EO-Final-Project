@@ -30,7 +30,7 @@ Satellite remote sensing is suitable for this problem because field observations
 However, optical snow mapping is still challenging because the snow is highly reflective, and the cloud, shadow, water and mixed pixels can be confused with the snow signal or obscure the land surface (Gaur et al., 2021). A common remote sensing approach is to use the Normalised Difference Snow Index (NDSI), which uses the contrast between high green reflectance and low short-wave infrared reflectance of snow (Gascoin et al., 2019). This method is simple and widely used, but a fixed threshold may not capture all local surface conditions in complex mountain terrain. 
 
 Therefore, this project combines an NDSI threshold baseline with K-means unsupervised classification for the target site, grouping pixels using multiple Sentinel-2 bands and spectral indices without requiring manually labelled training data. The second challenge is that monthly optical observations may be incomplete or uneven because of cloud cover and scene availability. To address this issue, a Gaussian Process regression is carried out using the monthly K-means snow-cover fractions, reconstructing a smooth seasonal snow-cover curve and providing uncertainty estimates between monthly observations. 
-这段目前内容上我觉得还可以稍微在第一段加一些细节和内容，你可以帮我看看再补充点什么吗？还有，第二段rs的部分太少了，就两句话，可以加点吗？以及，我觉得我们可以把第四段的second challenge结合到第三段，然后第四段专门讲：Research question & Specific research objectives (可以列点讲吧？做了什么+用了什么方法)；还有一个点：我觉得我们要提一下2025，因为我们的project只用了2025的数据
+这段目前内容上我觉得还可以稍微在第一段加一些细节和内容，你可以帮我看看再补充点什么吗？还有，第二段rs的部分太少了，就两句话，可以加点general的说明吗？比如sentinel2是用什么方法测量的、resolution大概是多少这种，就是多一些background info。以及，我觉得我们可以把第四段的second challenge结合到第三段，然后第四段专门讲：Research question & Specific research objectives (可以列点讲吧？做了什么+用了什么方法)；还有一个点：我觉得我们要提一下2025，因为我们的project只用了2025的数据
 
 ## Data and Study Area
 
@@ -67,8 +67,6 @@ The project is organised into three Jupyter notebooks, which were developed and 
 | `01_sentinel2_data_acquisition.ipynb` | Searches, selects, downloads and extracts the monthly Sentinel-2 products. |
 | `02_snow_cover_mapping_kmeans_gmm.ipynb` | Applies SCL masking, calculates NDSI and NDVI, creates NDSI-threshold and K-means snow masks, and compares K-means with GMM for one representative month. |
 | `03_gp_interpolation_gap_validation.ipynb` | Uses the monthly K-means snow-cover fraction for Gaussian Process interpolation and artificial gap validation. |
-
-The raw Sentinel-2 `.SAFE` products are not uploaded to this repository because of their large file size, but the provided notebooks and metadata in this responsitory can demonstrate which products were selected and how the analysis was carried out. To reproduce the full workflow from the raw data stage, the first notebook could be run, but it requires a Copernicus Data Space account. The personal username and password should be entered securely when running the code and should not be stored directly in the notebook.
 
 ## Methodology
 
@@ -132,7 +130,7 @@ While K-means assigns pixels to the nearest cluster centre, GMM represents each 
 
 GMM was applied only to the representative example of June 2025, using the same feature stack as the K-means classification, and the higher mean NDSI was also interpreted as the snow cluster. The resulting GMM snow mask was then compared with the K-means snow mask using snow-cover fraction and pixel-level agreement.
 
-<p align="left">
+<p align="center">
   <img src="figures/fig_04_kmeans_vs_gmm_june_2025.png" alt="K-means and GMM comparison for June 2025" width="700">
 </p>
 
@@ -212,5 +210,33 @@ The GP model trained on the remaining months after April and October data are re
 
 The full validation table is available in [`metadata/gp_artificial_gap_validation_2025.csv`](metadata/gp_artificial_gap_validation_2025.csv).
 
+## Getting Started and Repository Structure
 
+### Running Environment
 
+The notebooks were developed and run in Google Colab, and Google Drive is used to store downloaded Sentinel-2 products, processed files, metadata tables and exported figures.
+
+To mount Google Drive in Colab:
+
+```python
+from google.colab import drive
+drive.mount('/content/drive')
+```
+
+Some packages are imported directly from the Colab environment, while additional packages are installed inside the notebooks where needed. For example, Notebook 3 installs GPy before running the GP model:
+
+```python
+!pip install GPy
+```
+
+If Colab asks for a runtime restart after installing `GPy`, restart the runtime and then rerun the notebook cells from the beginning.
+
+### Running order
+
+To reproduce the workflow, run the notebooks in order:
+
+1. `01_sentinel2_data_acquisition.ipynb`
+2. `02_snow_cover_mapping_kmeans_gmm.ipynb`
+3. `03_gp_interpolation_gap_validation.ipynb`
+
+The raw Sentinel-2 `.SAFE` products are not uploaded to this repository because of their large file size, but the notebooks and metadata in this responsitory can demonstrate which products were selected and how the analysis was carried out. Notebook 1  requires a Copernicus Data Space account to download the Sentinel-2 products. **The personal username and password should be entered securely when running the code and should not be stored directly in the notebook.**
