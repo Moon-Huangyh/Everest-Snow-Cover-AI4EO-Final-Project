@@ -126,9 +126,9 @@ everest-snow-cover-ai4eo/
 │   └── gp_artificial_gap_validation_2025.png
 │
 ├── illustrations/
-│   ├── overall_workflow.png
-│   └── kmeans_concept_diagram.png
-│   └──Sentinel2.png
+│   ├── Sentinel2.png
+│   ├── kmeans_concept_diagram.png
+│   └── overall_workflow.png
 │
 └── metadata/
     ├── selected_monthly_products_2025.csv
