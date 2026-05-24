@@ -2,7 +2,7 @@
 ### Monitoring seasonal snow-cover variability in the western Mount Everest during 2025 using Sentinel-2 imagery, unsupervised classification, and Gaussian Process interpolation.
 
 <p align="center">
-  <img src="figures/fig_07_monthly_kmeans_snow_masks_2025.png" alt="Monthly K-means snow masks in 2025" width="600">
+  <img src="figures/fig_03_monthly_kmeans_snow_masks_2025.png" alt="Monthly K-means snow masks in 2025" width="600">
 </p>
 
 
@@ -105,4 +105,30 @@ $$
 \mathrm{Snow\ cover\ fraction} = \frac{\mathrm{number\ of\ snow\ pixels}}{\mathrm{number\ of\ valid\ pixels}}
 $$
 
-This threshold-based result was used as a reference for comparing with the K-means classification, rather than as independent ground truth.
+This threshold-based test was used as a reference for comparing with the K-means classification, rather than as independent ground truth.
+
+### 3. K-means unsupervised snow classification
+
+K-means is an unsupervised clustering algorithm that groups pixels with similar feature values without using labelled training data. In this project, **it was used as the main snow-classification method to separate valid pixels into two broad surface groups.**
+
+For each monthly scene, the valid pixels were reshaped into a pixel-by-feature matrix using six input features:
+
+- `B03` (green)
+- `B04` (red)
+- `B8A` (narrow NIR)
+- `B11` (SWIR)
+- `NDSI`
+- `NDVI`
+
+The K-means model was applied with `k = 2`, so that the valid pixels were separated into two clusters by minimising the within-cluster variance. After clustering, the mean NDSI value of each cluster was calculated. The cluster with the higher mean NDSI was interpreted as the snow cluster, and the other cluster was treated as non-snow.
+
+<p align="center">
+  <img src="figures/kmeans_concept_diagram.png" alt="Conceptual illustration of K-means clustering with k = 2" width="600">
+</p>
+
+
+
+
+
+
+
