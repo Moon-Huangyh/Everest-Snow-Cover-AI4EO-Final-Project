@@ -136,7 +136,7 @@ GMM was applied only to the representative example of June 2025, using the same 
   <img src="figures/fig_04_kmeans_vs_gmm_june_2025.png" alt="K-means and GMM comparison for June 2025" width="700">
 </p>
 
-This comparison is used as a method check rather than a full validation dataset, because no independent ground-truth snow labels were available.
+*This comparison is used as a method check rather than a full validation dataset, because no independent ground-truth snow labels were available.*
 
 ### 5. Gaussian Process Interpolation and Gap Validation
 
@@ -160,7 +160,57 @@ The workflow below summarises how the Sentinel-2 preprocessing, spectral-index c
   <img src="figures/Overall_Workflow.png" alt="Remote-sensing and machine-learning implementation workflow" width="500">
 </p>
 
+## Results
 
+**The main results are that K-means could produce snow-cover masks for all 12 months based on the downloadesd Sentinel-2 imageries, the K-means and GMM classifications were highly consistent for the representative June scene, and the Gaussian Process model could reconstruct a smooth seasonal snow-cover curve with uncertainty estimates successfully even when some data are missing.**
+
+### 1. Monthly K-means Snow Masks
+
+<p align="center">
+  <img src="figures/fig_03_monthly_kmeans_snow_masks_2025.png" alt="Monthly K-means snow masks in 2025" width="850">
+</p>
+
+The monthly K-means masks show clear seasonal changes in study region, but the cloud covers are also significant during the summer. These masks also provide the pixel-level basis for calculating monthly snow-cover fraction.
+
+### 2. NDSI threshold vs K-means snow-cover fraction
+
+<p align="center">
+  <img src="figures/fig_05_monthly_snow_fraction_timeseries_2025.png" alt="Monthly NDSI-threshold and K-means snow-cover fraction time series" width="500">
+</p>
+
+The NDSI-threshold and K-means results show broadly similar seasonal variability, but the exact snow-cover fractions are not identical. This is expected because the NDSI baseline uses a fixed threshold, while K-means uses multiple spectral bands and indices to group pixels. The K-means snow-cover fraction was used as the main monthly time series for the Gaussian Process step.
+
+### 3. K-means and GMM comparison
+
+| Method | Month | Snow-cover fraction |
+|---|---:|---:|
+| K-means | June | 0.365666 |
+| GMM | June | 0.366181 |
+
+The pixel-level agreement between K-means and GMM was 0.9948, meaning that about 99.5% of valid pixels received the same snow/non-snow label from both methods. This supports the use of K-means as the main classification method for the full monthly analysis.
+
+### 4. Gaussian Process seasonal reconstruction
+
+<p align="center">
+  <img src="figures/gp_interpolation_snow_fraction_2025.png" alt="Gaussian Process interpolation of monthly snow-cover fraction" width="500">
+</p>
+
+The GP model reconstructs a smooth seasonal snow-cover curve from the 12 monthly K-means observations. The uncertainty interval is wider between observations and near the edges of the time series, reflecting lower model confidence where fewer neighbouring observations constrain the prediction.
+
+### 5. Artificial gap validation
+
+<p align="center">
+  <img src="figures/gp_artificial_gap_validation_2025.png" alt="Artificial gap validation of Gaussian Process interpolation" width="500">
+</p>
+
+April and October were temporarily removed from the monthly K-means time series and predicted using a GP model trained on the remaining months. A good gap-filling result is indicated when the predicted values are close to the original observations and the observed values fall within the uncertainty intervals.
+
+| Held-out month | Observed snow-cover fraction | GP predicted snow-cover fraction | Absolute error | Within 95% interval? |
+|---|---:|---:|---:|---|
+| April | `add value` | `add value` | `add value` | Yes/No |
+| October | `add value` | `add value` | `add value` | Yes/No |
+
+The full validation table is available in [`metadata/gp_artificial_gap_validation_2025.csv`](metadata/gp_artificial_gap_validation_2025.csv).
 
 
 
