@@ -29,6 +29,12 @@ The aim of this project is to develop a compact AI4EO workflow for mapping and r
 - to carry out a K-means unsupervised learning analysis on the AOI and use a GMM on one representative month to check whether the result is sensitive to the clustering method;
 - to reconstruct a smooth seasonal snow-cover curve from monthly K-means snow-cover fractions using Gaussian Process regression, including uncertainty estimates and artificial gap validation.
 
+<p align="center">
+  <img src="illustrations/Sentinel2.png" alt="Sentinel 2 has a frequent revisit time" width="600">
+</p>
+
+*Figure Source: https://eu-space.europa.eu/news/observer-sentinel-2a-extending-operations-meet-user-needs*
+
 ## Data and Study Area
 
 This project uses Sentinel-2 Level-2A imagery from the Copernicus Data Space. The study area is a selected Area of Interest (AOI) in the western Mount Everest region, covered by Sentinel-2 tile `45RVM`. The AOI is approximately bounded by 86.85–86.97°E and 28.05–28.17°N, with an approximate centre at 86.91°E, 28.11°N.
