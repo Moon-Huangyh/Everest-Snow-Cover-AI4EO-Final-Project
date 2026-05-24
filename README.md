@@ -9,28 +9,25 @@
 
 ## Project Overview
 
-This project aims to map and estimate seasonal snow-cover variability in a selected area of the western Everest using one Sentinel-2 Level-2A scene for each month of 2025.
+This project monitors seasonal snow-cover variability in a selected western Mount Everest Area of Interest (AOI) during 2025. It uses 12 monthly Sentinel-2 Level-2A scenes to map snow cover, compare an NDSI-threshold baseline with K-means unsupervised classification and Gaussian Mixture Model (GMM), and reconstruct a smooth seasonal snow-cover curve using Gaussian Process regression.
 
-The Sentinel-2 images are first clipped to the study area and filtered using the Scene Classification Layer (SCL) to remove invalid, cloud-contaminated and cloud-shadow pixels. Normalized Difference Snow Index (NDSI) and Normalized Difference Vegetation Index (NDVI) are then calculated from the Sentinel-2 reflectance bands.
-
-A fixed NDSI-threshold method is used as a baseline, while K-means clustering is then applied as the main unsupervised classification method to separate snow-dominated and non-snow-dominated pixels. A Gaussian Mixture Model (GMM) is also tested on one representative June scene to compare with the K-means classification, and see if the snow/non-snow classification is sensitive to different unsupervised learning methods.
-
-Finally, the monthly K-means snow-cover fractions are used as input for Gaussian Process regression to reconstruct a seasonal snow-cover curve with uncertainty estimates. An artificial gap validation is also included to test whether the Gaussian Process model can reasonably estimate missing monthly observations.
-
-The main outputs are monthly snow masks, a snow-cover fraction time series, a Gaussian Process seasonal reconstruction, and a simple validation of gap-filling performance.
-
-
+The workflow produces monthly snow masks, monthly snow-cover fractions, a K-means and GMM method comparison for one representative month, and a Gaussian Process interpolation with uncertainty and artificial gap validation.
 
 ## Background and Problem Statement
 
-Seasonal snow cover is crucial in high-mountain regions because it influences hydrology, climate processes and water availability. Himalayan river systems depend partly on snow and glacier melt during the summer months, and the snow is accumulated again in the winter, so monitoring the snow cover variability is helpful for understanding changes in mountain water resources (Kulkarni et al., 2010). This project applies this problems to a selected Area of Interest (AOI) in the western Mount Everest region, where steep topography, seasonal snow, rock, ice and shadowed terrain make local snow-cover mapping a useful but challenging remote sensing task.
+Seasonal snow cover in high mountains influences hydrology, climate processes and water availability, because river systems depend partly on snow and glacier melt during the summer months, while snow accumulates again in winter. Therefore, monitoring snow cover variability is helpful for understanding changes in mountain water resources, which is especially important in steep mountain terrain, where snow cover can vary strongly over short distances because of elevation, slope, aspect and local shading (Kulkarni et al., 2010). This project applies this issue to a selected AOI in the **western Mount Everest region during 2025**, where seasonal snow, ice, exposed rock and shadowed terrain make local snow-cover mapping useful but challenging.
 
-Satellite remote sensing is suitable for this problem because field observations in high mountain topography are difficult, spatially limited and affected by harsh weather conditions. Sentinel-2 provides freely available multispectral imagery with relatively high resolution, which makes it suitable for regional snow-cover mapping (Nagajothi et al., 2019). 
+Satellite remote sensing is suitable for this study because field observations in high mountain terrains are difficult, spatially limited and affected by harsh weather conditions. Sentinel-2 provides freely available multispectral imagery that records reflected radiation from the Earth’s surface across visible, near-infrared and short-wave infrared bands. These spectral bands can be used for snow mapping because **snow has a distinctive optical signal that is usually bright in visible wavelengths but much darker in the short-wave infrared.** Sentinel-2 also provides relatively high spatial resolution, with 10 m, 20 m and 60 m bands, and the combined Sentinel-2A/B constellation has a frequent revisit time, making it suitable for regional snow-cover monitoring (Nagajothi et al., 2019; Wang et al., 2022).
 
-However, optical snow mapping is still challenging because the snow is highly reflective, and the cloud, shadow, water and mixed pixels can be confused with the snow signal or obscure the land surface (Gaur et al., 2021). A common remote sensing approach is to use the Normalised Difference Snow Index (NDSI), which uses the contrast between high green reflectance and low short-wave infrared reflectance of snow (Gascoin et al., 2019). This method is simple and widely used, but a fixed threshold may not capture all local surface conditions in complex mountain terrain. 
+However, optical snow mapping is still challenging because snow, cloud, shadow, water and mixed pixels can be confused with each other or obscure the land surface. A common remote-sensing approach is to use the Normalised Difference Snow Index (NDSI), which uses the contrast between high green reflectance and low short-wave infrared reflectance of snow (Gascoin et al., 2019). This method is simple and widely used, but a fixed threshold may not capture all local surface conditions in complex mountain terrain. Monthly optical observations may also be incomplete or uneven because of cloud cover and scene availability.
 
-Therefore, this project combines an NDSI threshold baseline with K-means unsupervised classification for the target site, grouping pixels using multiple Sentinel-2 bands and spectral indices without requiring manually labelled training data. The second challenge is that monthly optical observations may be incomplete or uneven because of cloud cover and scene availability. To address this issue, a Gaussian Process regression is carried out using the monthly K-means snow-cover fractions, reconstructing a smooth seasonal snow-cover curve and providing uncertainty estimates between monthly observations. 
-这段目前内容上我觉得还可以稍微在第一段加一些细节和内容，你可以帮我看看再补充点什么吗？还有，第二段rs的部分太少了，就两句话，可以加点general的说明吗？比如sentinel2是用什么方法测量的、resolution大概是多少这种，就是多一些background info。以及，我觉得我们可以把第四段的second challenge结合到第三段，然后第四段专门讲：Research question & Specific research objectives (可以列点讲吧？做了什么+用了什么方法)；还有一个点：我觉得我们要提一下2025，因为我们的project只用了2025的数据
+The aim of this project is to develop a compact AI4EO workflow for mapping and reconstructing seasonal snow-cover variability in the selected western Mount Everest AOI during 2025. The specific objectives are:
+
+- to download and organise one Sentinel-2 Level-2A scene for each month of 2025;
+- to calculate NDSI and NDVI after masking invalid, cloud-contaminated and cloud-shadow pixels;
+- to compare a simple NDSI-threshold snow-cover baseline with K-means unsupervised classification;
+- to carry out a K-means unsupervised learning analysis on the AOI and use a GMM on one representative month to check whether the result is sensitive to the clustering method;
+- to reconstruct a smooth seasonal snow-cover curve from monthly K-means snow-cover fractions using Gaussian Process regression, including uncertainty estimates and artificial gap validation.
 
 ## Data and Study Area
 
