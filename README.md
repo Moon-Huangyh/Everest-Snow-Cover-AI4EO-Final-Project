@@ -95,7 +95,7 @@ where `B8A` is the narrow near-infrared band (NIR) and `B04` is the red band (Te
   <img src="figures/fig_02_ndsi_ndvi_june_2025.png" alt="NDSI and NDVI example for June 2025" width="650">
 </p>
 
-### 2. NDSI-threshold Baseline
+### 2. NDSI Threshold Baseline
 
 A simple NDSI threshold method was used as a baseline snow-cover estimate. After SCL masking, valid pixels with `NDSI > 0.4` were classified as snow, following a commonly used threshold for binary snow mapping (Dozier, 1989; Kulkarni et al., 2010).
 
@@ -170,15 +170,15 @@ The workflow below summarises how the Sentinel-2 preprocessing, spectral-index c
   <img src="figures/fig_03_monthly_kmeans_snow_masks_2025.png" alt="Monthly K-means snow masks in 2025" width="850">
 </p>
 
-The monthly K-means masks show clear seasonal changes in study region, but the cloud covers are also significant during the summer. These masks also provide the pixel-level basis for calculating monthly snow-cover fraction.
+The monthly K-means masks show clear seasonal changes in the study region, but the cloud covers are also significant during the summer. These masks also provide the pixel-level basis for calculating monthly snow-cover fraction.
 
-### 2. NDSI threshold vs K-means snow-cover fraction
+### 2. NDSI Threshold vs K-means Snow Cover Fraction
 
 <p align="center">
   <img src="figures/fig_05_monthly_snow_fraction_timeseries_2025.png" alt="Monthly NDSI-threshold and K-means snow-cover fraction time series" width="500">
 </p>
 
-The NDSI-threshold and K-means results show broadly similar seasonal variability, but the exact snow-cover fractions are not identical. This is expected because the NDSI baseline uses a fixed threshold, while K-means uses multiple spectral bands and indices to group pixels. The K-means snow-cover fraction was used as the main monthly time series for the Gaussian Process step.
+The NDSI threshold and K-means results show broadly similar seasonal variability, but their snow-cover fractions are not identical. This is expected because the NDSI method uses a fixed single-index threshold, while K-means uses multiple Sentinel-2 bands and spectral indices to group pixels. **In this dataset, the NDSI-threshold baseline generally gives a more inclusive snow estimate, whereas K-means provides a more conservative classification by considering the wider spectral behaviour of each pixel.** These differences are most likely to occur in mixed pixels, shadowed terrain, and pixels with intermediate NDSI values.
 
 ### 3. K-means and GMM comparison
 
@@ -189,13 +189,13 @@ The NDSI-threshold and K-means results show broadly similar seasonal variability
 
 The pixel-level agreement between K-means and GMM was 0.9948, meaning that about 99.5% of valid pixels received the same snow/non-snow label from both methods. This supports the use of K-means as the main classification method for the full monthly analysis.
 
-### 4. Gaussian Process seasonal reconstruction
+### 4. Gaussian Process Seasonal Reconstruction
 
 <p align="center">
   <img src="figures/gp_interpolation_snow_fraction_2025.png" alt="Gaussian Process interpolation of monthly snow-cover fraction" width="500">
 </p>
 
-The GP model reconstructs a smooth seasonal snow-cover curve from the 12 monthly K-means observations. The uncertainty interval is wider between observations and near the edges of the time series, reflecting lower model confidence where fewer neighbouring observations constrain the prediction.
+The GP model reconstructs a smooth seasonal snow-cover curve from the 12 monthly K-means observation results. The uncertainty interval is wider between observations and near the edges of the time series, reflecting less confidence where fewer neighbouring observations constrain the prediction.
 
 ### 5. Artificial gap validation
 
@@ -203,12 +203,12 @@ The GP model reconstructs a smooth seasonal snow-cover curve from the 12 monthly
   <img src="figures/gp_artificial_gap_validation_2025.png" alt="Artificial gap validation of Gaussian Process interpolation" width="500">
 </p>
 
-April and October were temporarily removed from the monthly K-means time series and predicted using a GP model trained on the remaining months. A good gap-filling result is indicated when the predicted values are close to the original observations and the observed values fall within the uncertainty intervals.
+The GP model trained on the remaining months after April and October data are removed. A good gap-filling result is indicated when the predicted values are close to the original observations and the observed values fall within the uncertainty intervals.
 
-| Held-out month | Observed snow-cover fraction | GP predicted snow-cover fraction | Absolute error | Within 95% interval? |
-|---|---:|---:|---:|---|
-| April | `add value` | `add value` | `add value` | Yes/No |
-| October | `add value` | `add value` | `add value` | Yes/No |
+| Held-out month | Observed K-means snow-cover fraction | GP predicted snow-cover fraction | 95% uncertainty interval | Absolute error | Within 95% interval? |
+|---|---:|---:|---:|---:|:---:|
+| April | 0.483 | 0.528 | 0.334–0.721 | 0.044 | Yes |
+| October | 0.621 | 0.507 | 0.310–0.704 | 0.114 | Yes |
 
 The full validation table is available in [`metadata/gp_artificial_gap_validation_2025.csv`](metadata/gp_artificial_gap_validation_2025.csv).
 
