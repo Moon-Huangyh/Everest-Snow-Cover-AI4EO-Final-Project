@@ -331,6 +331,16 @@ The project uses existing open-access Sentinel-2 data rather than collecting new
 
 ### Disadvantages and Uncertainties
 
-The calculation only represents one run of the notebooks, so the real project footprint would be higher if repeated development and debugging runs were included. The estimate also excludes considerations on network-transfer emissions, long-term Google Drive storage energy caused, and the volume of water used for data-centre cooling.
+The calculation only represents one run of the notebooks, so it is only a minimal estimate. **The real project footprint would be higher if repeated development and debugging runs were included.** The estimate also excludes considerations on network-transfer emissions, long-term Google Drive storage energy caused, and the volume of water used for data-centre cooling.
 
-The workflow is low-carbon comparing to many larger machine learning projects, but its consumption is not zero either. The main environmental cost is likely associated with downloading and storing the Sentinel-2 products rather than the machine-learning models themselves.
+The workflow is low-carbon comparing to many larger machine learning projects, but **its consumption is not zero** either. The main environmental cost is likely associated with downloading and storing the Sentinel-2 products rather than the machine-learning models themselves.
+
+## Limitations and Future Work
+
+- **Limited Temporal Sampling:** Only one Sentinel-2 scene was selected for each month, so the monthly snow-cover fraction represents one selected observation rather than a full monthly average. Future work could use multiple low-cloud imageries per month if available.
+- **No Independent Ground Truth:** The NDSI threshold and GMM comparison did provide useful checks, but they are not a formal accuracy assessment, and cannot provide basis for a formal confusion matrix. Future work could compare the snow masks with labelled snow products or higher-resolution reference imageries.
+- **Mountain Terrain and Optical Imagery Impacts:** Cloud, shadow, topographic effects and mixed pixels can still affect the classification even K-means is used. Future work could include DEM-based variables such as elevation, slope and aspect, or test SAR-based methods for cloud-affected periods.
+- Also, The workflow was tested on one western Mount Everest AOI in 2025, so wider application would require testing across more years and additional Himalayan regions.
+
+## References:
+
