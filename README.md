@@ -399,3 +399,7 @@ Course: GEOL0069 - AI for Earth Observation 2025-2026
 ## Acknowledgement
 
 This project was created as the final project of GEOL0069-AI for Earth Observation at University College London. Many thanks to Dr. Michel Tsamados for his patient explanation throughout the course, and thanks to Weibin Chen and Shambhu Bhandari Sharma for helping solve the errors occurred during the practical sessions.
+
+## Declaration of Generative AI Use
+
+I acknowledge the use of ChatGPT (https://chatgpt.com) in an assistive role during this project. It was used to support code writing and Python debugging, and to provide limited feedback on grammar, clarity, and overall logic after the main written content had been completed. All substantive work, including project planning, notebook structure, data analysis, result interpretation, GitHub formatting, and YouTube video recording and editing, was completed by myself. Any AI-generated suggestions were carefully reviewed and independently verified before being incorporated into the final submission.
